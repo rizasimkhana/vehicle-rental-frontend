@@ -16,14 +16,13 @@ const AdminDashboard = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [vehicles, setVehicles] = useState([]);
   const [activeAccordion, setActiveAccordion] = useState(null);
-   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle the mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle the mobile menu
 
-   const toggleMenu = () => {
+  const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const user = JSON.parse(localStorage.getItem('user')) || {};
-
   const { id } = useParams();  // Get the vehicle id from the URL params
   const navigate = useNavigate();
 
@@ -86,7 +85,7 @@ const AdminDashboard = () => {
     setLocation('');
     setDescription('');
     setImage('');
-  
+
     // Prepare the data to be sent
     const updatedData = {
       make,
@@ -97,17 +96,17 @@ const AdminDashboard = () => {
       location,
       description,
     };
-  
+
     try {
       if (isUpdate) {
         // If image is updated, use FormData, otherwise send the data as JSON
         const formData = new FormData();
-  
+
         // Append the updated data fields (with or without image)
         Object.entries(updatedData).forEach(([key, value]) => {
           if (value) formData.append(key, value);
         });
-  
+
         if (image) {
           // Append image if it's selected
           formData.append('image', image);
@@ -130,21 +129,21 @@ const AdminDashboard = () => {
         Object.entries(updatedData).forEach(([key, value]) => {
           if (value) formData.append(key, value);
         });
-  
+
         if (image) {
           formData.append('image', image);
         }
-  
+
         await axios.post('https://vehicle-rental-6o3p.onrender.com/api/vehicles', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       }
-  
+
       // After successful add or update, fetch the vehicles again to refresh the list
       fetchVehicles();
-  
+
       // Optionally, you can also redirect to the admin dashboard (or stay on the same page)
       navigate('/admin-dashboard'); // Redirect to dashboard after successful submission
     } catch (err) {
@@ -153,12 +152,6 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   };
-  
-  
-  
-  
-  
-  
 
   const toggleAccordion = (vehicleId) => {
     setActiveAccordion(activeAccordion === vehicleId ? null : vehicleId);
@@ -173,6 +166,12 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handle Logout
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login'); // Navigate to login page after logout
+  };
+
   return (
     <>
       <nav className="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 p-4 shadow-lg">
@@ -180,33 +179,43 @@ const AdminDashboard = () => {
           <Link to="/" className="text-white text-3xl font-bold">
             Dash Cars
           </Link>
-            {/* Desktop Navbar */}
-            <div className="hidden md:flex space-x-6">
+          {/* Desktop Navbar */}
+          <div className="hidden md:flex space-x-6">
             <Link to="/admin-dashboard" className="text-white">Home</Link>
             <Link to="/rental-history" className="text-white">Rental History</Link>
             <Link to="/payment-history" className="text-white">Payment History</Link>
             <Link to={`/bookings`} className="text-white">Bookings</Link>
           </div>
-               {/* Mobile Hamburger Menu */}
-               <div className="md:hidden">
+
+          {/* Mobile Hamburger Menu */}
+          <div className="md:hidden">
             <button onClick={toggleMenu} className="text-white">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
                 <path d="M2 2h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1z"/>
               </svg>
             </button>
           </div>
-                {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-blue-500 p-4 space-y-4">
-          <Link to="/admin-dashboard" className="text-white block">Home</Link>
-          <Link to="/rental-history" className="text-white block">Rental History</Link>
-          <Link to="/payment-history" className="text-white block">Payment History</Link>
-          <Link to={`/bookings`} className="text-white">Bookings</Link>
-        </div>
-      )}
+          
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="md:hidden bg-blue-500 p-4 space-y-4">
+              <Link to="/admin-dashboard" className="text-white block">Home</Link>
+              <Link to="/rental-history" className="text-white block">Rental History</Link>
+              <Link to="/payment-history" className="text-white block">Payment History</Link>
+              <Link to={`/bookings`} className="text-white">Bookings</Link>
+            </div>
+          )}
+
+          {/* User and Logout */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gray-800 text-white flex items-center justify-center rounded-full">A</div>
             <p className="text-white font-semibold">Admin</p>
+            <button
+              onClick={handleLogout}
+              className="text-white ml-4 hover:text-gray-200"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </nav>

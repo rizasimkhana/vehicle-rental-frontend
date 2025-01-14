@@ -1,96 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import { ClipLoader } from 'react-spinners'; // Import the spinner component from react-spinners
-import { useNavigate, Link } from 'react-router-dom';
-import { useBookingContext } from '../services/BookingContext';
-import { getVehicles } from '../services/api';
-import BookingList from './BookingList';
+import React, { useEffect, useState } from 'react'; 
+import { ClipLoader } from 'react-spinners'; 
+import { useNavigate, Link } from 'react-router-dom'; 
+import { useBookingContext } from '../services/BookingContext'; 
+import { getVehicles } from '../services/api'; 
+
 
 const Dashboard = () => {
-  const [vehicles, setVehicles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [vehicleType, setVehicleType] = useState('');
-  const [location, setLocation] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // State to toggle the mobile menu
+  const [vehicles, setVehicles] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(''); 
+  const [vehicleType, setVehicleType] = useState(''); 
+  const [location, setLocation] = useState(''); 
+  const [minPrice, setMinPrice] = useState(''); 
+  const [maxPrice, setMaxPrice] = useState(''); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const { setPricePerDay } = useBookingContext(); 
 
-  const handleBookingClick = (vehicle) => {
-    setPricePerDay(vehicle.pricePerDay);
-    navigate(`/booking/${vehicle._id}`, { state: { vehicle } });
+  const handleBookingClick = (vehicle) => { 
+    setPricePerDay(vehicle.pricePerDay); 
+    navigate(`/booking/${vehicle._id}`, { state: { vehicle } }); 
+  }; 
+
+  const fetchVehicles = async () => { 
+    setLoading(true); 
+    setError(''); 
+    try { 
+      const validMinPrice = isNaN(minPrice) || minPrice === '' ? '' : minPrice; 
+      const validMaxPrice = isNaN(maxPrice) || maxPrice === '' ? '' : maxPrice; 
+      const vehiclesData = await getVehicles({ vehicleType, location, minPrice: validMinPrice, maxPrice: validMaxPrice }); 
+
+      if (vehiclesData.length === 0) { 
+        setError('No vehicles found with the selected filters'); 
+      } else { 
+        setError(''); 
+      } 
+
+      setVehicles(vehiclesData); 
+    } catch (err) { 
+      setError('Failed to fetch vehicles'); 
+    } finally { 
+      setLoading(false); 
+    } 
+  }; 
+
+  useEffect(() => { 
+    fetchVehicles(); 
+  }, []); 
+
+  const handleClear = (field) => { 
+    switch (field) { 
+      case 'vehicleType': 
+        setVehicleType(''); 
+        break; 
+      case 'location': 
+        setLocation(''); 
+        break; 
+      case 'minPrice': 
+        setMinPrice(''); 
+        break; 
+      case 'maxPrice': 
+        setMaxPrice(''); 
+        break; 
+      default: 
+        break; 
+    } 
+  }; 
+
+  const user = JSON.parse(localStorage.getItem('user')) || {}; 
+  const firstLetter = user.name ? user.name.charAt(0).toUpperCase() : ''; 
+
+  // Toggle the mobile menu 
+  const toggleMenu = () => { 
+    setIsMenuOpen(!isMenuOpen); 
+  }; 
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login');  // Redirect to login page
   };
 
-  const fetchVehicles = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const validMinPrice = isNaN(minPrice) || minPrice === '' ? '' : minPrice;
-      const validMaxPrice = isNaN(maxPrice) || maxPrice === '' ? '' : maxPrice;
-      const vehiclesData = await getVehicles({ vehicleType, location, minPrice: validMinPrice, maxPrice: validMaxPrice });
+  if (loading) return ( 
+    <div className="flex justify-center items-center h-screen"> 
+      <ClipLoader size={50} color="#3498db" loading={loading} /> 
+    </div> 
+  ); 
 
-      if (vehiclesData.length === 0) {
-        setError('No vehicles found with the selected filters');
-      } else {
-        setError('');
-      }
-
-      setVehicles(vehiclesData);
-    } catch (err) {
-      setError('Failed to fetch vehicles');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchVehicles();
-  }, []);
-
-  const handleClear = (field) => {
-    switch (field) {
-      case 'vehicleType':
-        setVehicleType('');
-        break;
-      case 'location':
-        setLocation('');
-        break;
-      case 'minPrice':
-        setMinPrice('');
-        break;
-      case 'maxPrice':
-        setMaxPrice('');
-        break;
-      default:
-        break;
-    }
-  };
-
-  const user = JSON.parse(localStorage.getItem('user')) || {};
-  const firstLetter = user.name ? user.name.charAt(0).toUpperCase() : '';
-
-  // Toggle the mobile menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  if (loading) return (
-    <div className="flex justify-center items-center h-screen">
-      <ClipLoader size={50} color="#3498db" loading={loading} />
-    </div>
-  );
-
-  return (
-    <>
+  return ( 
+    <> 
       {/* Responsive Navbar */}
       <nav className="bg-blue-500 p-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-transparent text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
             Dash Cars
           </Link>
-
           {/* Desktop Navbar */}
           <div className="hidden md:flex space-x-6">
             <Link to="/user-dashboard" className="text-white">Home</Link>
@@ -98,7 +103,6 @@ const Dashboard = () => {
             <Link to="/payment-history" className="text-white">Payment History</Link>
             <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
           </div>
-
           {/* Mobile Hamburger Menu */}
           <div className="md:hidden">
             <button onClick={toggleMenu} className="text-white">
@@ -107,7 +111,6 @@ const Dashboard = () => {
               </svg>
             </button>
           </div>
-
           {/* First Letter Circle and Username */}
           {firstLetter && (
             <div className="flex items-center space-x-2">
@@ -115,6 +118,13 @@ const Dashboard = () => {
                 {firstLetter}
               </div>
               <p className="text-white font-semibold">{user.name}</p>
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 ml-4"
+              >
+                Logout
+              </button>
             </div>
           )}
         </div>
@@ -213,7 +223,7 @@ const Dashboard = () => {
 
             {/* Apply Filters Button */}
             <button
-              onClick={fetchVehicles} // Trigger fetch when Apply Filters button is clicked
+              onClick={fetchVehicles}
               className="col-span-1 md:col-span-2 lg:col-span-4 bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300"
             >
               Apply Filters
@@ -237,8 +247,8 @@ const Dashboard = () => {
               <div key={vehicle._id} className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
                 <Link to={`/vehicle/${vehicle._id}`} className="block">
                   <img
-                    src={`https://vehicle-rental-6o3p.onrender.com/${vehicle.image}`} 
-                    alt={vehicle.model} 
+                    src={`https://vehicle-rental-6o3p.onrender.com/${vehicle.image}`}
+                    alt={vehicle.model}
                     className="w-full h-48 object-cover rounded-t-lg mb-4"
                   />
                   <div className="text-center mb-6">
@@ -253,13 +263,13 @@ const Dashboard = () => {
                   </div>
                 </Link>
                 <div className="mt-4 text-center">
-                  <button 
+                  <button
                     className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300"
                     onClick={() => handleBookingClick(vehicle)}
                   >
                     Book Now
                   </button>
-                </div>  
+                </div>
               </div>
             ))
           ) : (
@@ -267,7 +277,6 @@ const Dashboard = () => {
           )}
         </div>
       </div>
-      {/* <BookingList userId={user._id}/> */}
     </>
   );
 };
