@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
+import moment from 'moment'; // For date formatting
 
 const BookingsAdmin = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editableBooking, setEditableBooking] = useState(null); // Store the editable booking
+  const [loadingBookingId, setLoadingBookingId] = useState(null); // Track loading state for each booking
   const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   useEffect(() => {
@@ -24,19 +26,20 @@ const BookingsAdmin = () => {
   }, []);  // Empty dependency array ensures this runs only once (on component mount)
 
   const handleCancel = (bookingId) => {
-    // Call API to cancel the booking
+    setError(null); // Clear any previous errors
+    setLoadingBookingId(bookingId); // Mark the current booking as loading
     axios.delete(`https://vehicle-rental-6o3p.onrender.com/api/bookings/cancel/${bookingId}`, { isCanceled: true })
       .then((response) => {
-        // Update the bookings state to reflect the cancellation
         setBookings((prevBookings) =>
           prevBookings.map((booking) =>
             booking._id === bookingId ? { ...booking, isCanceled: true } : booking
           )
         );
-        // Redirect back to dashboard after canceling
+        setLoadingBookingId(null); // Reset loading state
         navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
+        setLoadingBookingId(null); // Reset loading state
         setError('Error canceling booking: ' + error.message);
       });
   };
@@ -46,23 +49,24 @@ const BookingsAdmin = () => {
   };
 
   const handleSave = (bookingId, updatedStartDate, updatedEndDate) => {
-    // Call the modifyBooking API with the new start and end dates
+    setError(null); // Clear previous errors
+    setLoadingBookingId(bookingId); // Mark the current booking as loading
     axios.put(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
       startDate: updatedStartDate,
       endDate: updatedEndDate,
     })
       .then((response) => {
-        // Update the bookings state with the modified booking
         setBookings((prevBookings) =>
           prevBookings.map((booking) =>
             booking._id === bookingId ? { ...booking, startDate: updatedStartDate, endDate: updatedEndDate } : booking
           )
         );
         setEditableBooking(null); // Clear editable mode
-        // Redirect back to dashboard after modifying
+        setLoadingBookingId(null); // Reset loading state
         navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
+        setLoadingBookingId(null); // Reset loading state
         setError('Error modifying booking: ' + error.message);
       });
   };
@@ -104,13 +108,13 @@ const BookingsAdmin = () => {
             {bookings.map((booking) => (
               <tr key={booking._id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-2 text-sm text-gray-700">
-                  {booking.vehicleId.make} {booking.vehicleId.model}
+                  {booking.vehicleId ? `${booking.vehicleId.make} ${booking.vehicleId.model}` : 'N/A'}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-700">
                   {editableBooking && editableBooking._id === booking._id ? (
                     <input
                       type="datetime-local"
-                      defaultValue={new Date(booking.startDate).toISOString().slice(0, 16)}
+                      value={moment(booking.startDate).format('YYYY-MM-DDTHH:mm')}
                       onChange={(e) => setEditableBooking({ ...editableBooking, startDate: e.target.value })}
                     />
                   ) : (
@@ -121,7 +125,7 @@ const BookingsAdmin = () => {
                   {editableBooking && editableBooking._id === booking._id ? (
                     <input
                       type="datetime-local"
-                      defaultValue={new Date(booking.endDate).toISOString().slice(0, 16)}
+                      value={moment(booking.endDate).format('YYYY-MM-DDTHH:mm')}
                       onChange={(e) => setEditableBooking({ ...editableBooking, endDate: e.target.value })}
                     />
                   ) : (
@@ -137,8 +141,9 @@ const BookingsAdmin = () => {
                           <button
                             className="text-white bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
                             onClick={() => handleSave(booking._id, editableBooking.startDate, editableBooking.endDate)}
+                            disabled={loadingBookingId === booking._id} // Disable when loading
                           >
-                            Save
+                            {loadingBookingId === booking._id ? 'Saving...' : 'Save'}
                           </button>
                           <button
                             className="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600"
@@ -158,8 +163,9 @@ const BookingsAdmin = () => {
                           <button
                             className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
                             onClick={() => handleCancel(booking._id)}
+                            disabled={loadingBookingId === booking._id} // Disable when loading
                           >
-                            Cancel
+                            {loadingBookingId === booking._id ? 'Canceling...' : 'Cancel'}
                           </button>
                         </>
                       )}
