@@ -185,6 +185,7 @@ const AdminDashboard = () => {
             <Link to="/rental-history" className="text-white">Rental History</Link>
             <Link to="/payment-history" className="text-white">Payment History</Link>
             <Link to={`/bookings`} className="text-white">Bookings</Link>
+            <Link to={`/user-accounts`} className="text-white">User Accounts</Link>
           </div>
 
           {/* Mobile Hamburger Menu */}
@@ -203,6 +204,7 @@ const AdminDashboard = () => {
               <Link to="/rental-history" className="text-white block">Rental History</Link>
               <Link to="/payment-history" className="text-white block">Payment History</Link>
               <Link to={`/bookings`} className="text-white">Bookings</Link>
+              <Link to={`/user-accounts`} className="text-white">User Accounts</Link>
             </div>
           )}
 

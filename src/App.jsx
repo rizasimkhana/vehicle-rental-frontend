@@ -14,7 +14,7 @@ import RentalHistory from './components/RentalHistory';
 import BookingList from './components/BookingList';
 import HomePage from './components/HomePage';
 import BookingAdmin from './components/BookingAdmin';
-
+import UsersList from './components/UsersList';
 
 
 function App() {
@@ -35,6 +35,7 @@ function App() {
         <Route path="/rental-history" element={<RentalHistory />} />
         <Route path="/bookings/:userId" element={<BookingList />} />
         <Route path="/bookings" element={<BookingAdmin />} />
+        <Route path="/user-accounts" element={<UsersList />} />
 
         </Routes>
     </Router>
