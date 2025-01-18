@@ -5,6 +5,7 @@ const BookingsAdmin = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editableBooking, setEditableBooking] = useState(null); // Store the editable booking
 
   useEffect(() => {
     // Fetch bookings from the API
@@ -32,6 +33,30 @@ const BookingsAdmin = () => {
       })
       .catch((error) => {
         setError('Error canceling booking: ' + error.message);
+      });
+  };
+
+  const handleEdit = (booking) => {
+    setEditableBooking(booking); // Set the booking for editing
+  };
+
+  const handleSave = (bookingId, updatedStartDate, updatedEndDate) => {
+    // Call the modifyBooking API with the new start and end dates
+    axios.patch(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
+      startDate: updatedStartDate,
+      endDate: updatedEndDate,
+    })
+      .then((response) => {
+        // Update the bookings state with the modified booking
+        setBookings((prevBookings) =>
+          prevBookings.map((booking) =>
+            booking._id === bookingId ? { ...booking, startDate: updatedStartDate, endDate: updatedEndDate } : booking
+          )
+        );
+        setEditableBooking(null); // Clear editable mode
+      })
+      .catch((error) => {
+        setError('Error modifying booking: ' + error.message);
       });
   };
 
@@ -64,17 +89,64 @@ const BookingsAdmin = () => {
                 <td className="px-4 py-2 text-sm text-gray-700">
                   {booking.vehicleId.make} {booking.vehicleId.model}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-700">{new Date(booking.startDate).toLocaleString()}</td>
-                <td className="px-4 py-2 text-sm text-gray-700">{new Date(booking.endDate).toLocaleString()}</td>
+                <td className="px-4 py-2 text-sm text-gray-700">
+                  {editableBooking && editableBooking._id === booking._id ? (
+                    <input
+                      type="datetime-local"
+                      defaultValue={new Date(booking.startDate).toISOString().slice(0, 16)}
+                      onChange={(e) => setEditableBooking({ ...editableBooking, startDate: e.target.value })}
+                    />
+                  ) : (
+                    new Date(booking.startDate).toLocaleString()
+                  )}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-700">
+                  {editableBooking && editableBooking._id === booking._id ? (
+                    <input
+                      type="datetime-local"
+                      defaultValue={new Date(booking.endDate).toISOString().slice(0, 16)}
+                      onChange={(e) => setEditableBooking({ ...editableBooking, endDate: e.target.value })}
+                    />
+                  ) : (
+                    new Date(booking.endDate).toLocaleString()
+                  )}
+                </td>
                 <td className="px-4 py-2 text-sm text-gray-700">{booking.isCanceled ? 'Canceled' : 'Confirmed'}</td>
                 <td className="px-4 py-2 text-sm text-gray-700">
                   {!booking.isCanceled && (
-                    <button
-                      className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-                      onClick={() => handleCancel(booking._id)}
-                    >
-                      Cancel
-                    </button>
+                    <div className="flex space-x-2">
+                      {editableBooking && editableBooking._id === booking._id ? (
+                        <>
+                          <button
+                            className="text-white bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+                            onClick={() => handleSave(booking._id, editableBooking.startDate, editableBooking.endDate)}
+                          >
+                            Save
+                          </button>
+                          <button
+                            className="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600"
+                            onClick={() => setEditableBooking(null)} // Cancel editing
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="text-white bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600"
+                            onClick={() => handleEdit(booking)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="text-white bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+                            onClick={() => handleCancel(booking._id)}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                    </div>
                   )}
                 </td>
               </tr>
