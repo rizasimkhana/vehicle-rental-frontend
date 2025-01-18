@@ -42,7 +42,7 @@ const BookingsAdmin = () => {
 
   const handleSave = (bookingId, updatedStartDate, updatedEndDate) => {
     // Call the modifyBooking API with the new start and end dates
-    axios.post(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
+    axios.put(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
       startDate: updatedStartDate,
       endDate: updatedEndDate,
     })
