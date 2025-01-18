@@ -22,7 +22,7 @@ const BookingsAdmin = () => {
 
   const handleCancel = (bookingId) => {
     // Call API to cancel the booking
-    axios.patch(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, { isCanceled: true })
+    axios.delete(`https://vehicle-rental-6o3p.onrender.com/api/bookings/cancel/${bookingId}`, { isCanceled: true })
       .then((response) => {
         // Update the bookings state to reflect the cancellation
         setBookings((prevBookings) =>
@@ -42,7 +42,7 @@ const BookingsAdmin = () => {
 
   const handleSave = (bookingId, updatedStartDate, updatedEndDate) => {
     // Call the modifyBooking API with the new start and end dates
-    axios.patch(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
+    axios.post(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
       startDate: updatedStartDate,
       endDate: updatedEndDate,
     })
