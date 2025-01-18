@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';  // Import Link from react-router-dom
 
 const UsersList = () => {
     const [users, setUsers] = useState([]);
@@ -30,7 +31,14 @@ const UsersList = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-6">
             <h1 className="text-3xl font-semibold text-center mb-6">User List</h1>
-            
+
+            {/* Button or Link to go back to Admin Dashboard */}
+            <div className="mb-4 text-center">
+                <Link to="/admin-dashboard" className="text-white bg-blue-500 px-4 py-2 rounded hover:bg-blue-600">
+                    Back to Admin Dashboard
+                </Link>
+            </div>
+
             {users.length > 0 ? (
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
