@@ -34,7 +34,7 @@ function App() {
         <Route path="/vehicle/:vehicleId" element={<VehicleDetails />} />
         <Route path="/rental-history" element={<RentalHistory />} />
         <Route path="/bookings/:userId" element={<BookingList />} />
-        <Route path="/bookings" element={<BookingAdmin />} />
+        <Route path="/bookings-admin" element={<BookingAdmin />} />
         <Route path="/user-accounts" element={<UsersList />} />
 
         </Routes>
