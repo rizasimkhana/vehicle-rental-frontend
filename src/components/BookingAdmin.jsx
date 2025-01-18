@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'; // To handle redirection
 
 const BookingsAdmin = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editableBooking, setEditableBooking] = useState(null); // Store the editable booking
+  const history = useHistory(); // For redirecting after editing or canceling
 
   useEffect(() => {
-    // Fetch bookings from the API
+    // Fetch bookings from the API, and filter only confirmed bookings
     axios.get('https://vehicle-rental-6o3p.onrender.com/api/bookings/user/')
       .then((response) => {
-        setBookings(response.data.bookings);  // Update state with bookings
+        const confirmedBookings = response.data.bookings.filter(booking => !booking.isCanceled);
+        setBookings(confirmedBookings);  // Update state with confirmed bookings only
         setLoading(false);  // Stop loading
       })
       .catch((error) => {
@@ -30,6 +33,8 @@ const BookingsAdmin = () => {
             booking._id === bookingId ? { ...booking, isCanceled: true } : booking
           )
         );
+        // Redirect back to dashboard after canceling
+        history.push('/admin-dashboard');
       })
       .catch((error) => {
         setError('Error canceling booking: ' + error.message);
@@ -54,6 +59,8 @@ const BookingsAdmin = () => {
           )
         );
         setEditableBooking(null); // Clear editable mode
+        // Redirect back to dashboard after modifying
+        history.push('/admin-dashboard');
       })
       .catch((error) => {
         setError('Error modifying booking: ' + error.message);
@@ -71,6 +78,16 @@ const BookingsAdmin = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <h1 className="text-3xl font-semibold text-center mb-6">Bookings List</h1>
+
+      {/* Back to Dashboard Button */}
+      <div className="mb-6 text-center">
+        <button
+          className="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600"
+          onClick={() => history.push('/admin-dashboard')}
+        >
+          Back to Admin Dashboard
+        </button>
+      </div>
 
       {bookings.length > 0 ? (
         <table className="min-w-full table-auto border-collapse">
