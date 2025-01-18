@@ -28,7 +28,7 @@ const BookingAdmin = () => {
   }, [userId]);
 
   const handleBack = () => {
-    navigate('/user-dashboard');
+    navigate('/admin-dashboard');
   };
 
   const handleEditToggle = (id, booking) => {
