@@ -24,11 +24,6 @@ const BookingsAdmin = () => {
   }, []);  // Empty dependency array ensures this runs only once (on component mount)
 
   const handleCancel = (bookingId) => {
-    // First, find the booking by ID to get associated user and vehicle
-    const bookingToCancel = bookings.find(booking => booking._id === bookingId);
-    const userId = bookingToCancel?.userId; // Assuming `userId` is part of the booking
-    const vehicleId = bookingToCancel?.vehicleId; // Assuming `vehicleId` is part of the booking
-  
     // Call API to cancel the booking
     axios.delete(`https://vehicle-rental-6o3p.onrender.com/api/bookings/cancel/${bookingId}`, { isCanceled: true })
       .then((response) => {
@@ -38,39 +33,19 @@ const BookingsAdmin = () => {
             booking._id === bookingId ? { ...booking, isCanceled: true } : booking
           )
         );
-  
-        // Fetch user and vehicle details after canceling
-        if (userId && vehicleId) {
-          axios.all([
-            axios.get(`https://vehicle-rental-6o3p.onrender.com/api/users/${userId}`),
-            axios.get(`https://vehicle-rental-6o3p.onrender.com/api/vehicles/${vehicleId}`)
-          ])
-          .then(axios.spread((userResponse, vehicleResponse) => {
-            const user = userResponse.data; // User details (email, etc.)
-            const vehicle = vehicleResponse.data; // Vehicle details (make, model, etc.)
-  
-            // Now you can use this data as needed (e.g., send email, log info)
-            console.log(`Booking canceled for ${user.email} on ${vehicle.make} ${vehicle.model}`);
-          }))
-          .catch((error) => {
-            console.error('Error fetching user or vehicle details:', error);
-          });
-        }
-  
         // Redirect back to dashboard after canceling
-        navigate('/admin-dashboard');
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
         setError('Error canceling booking: ' + error.message);
       });
   };
-  
+
+  const handleEdit = (booking) => {
+    setEditableBooking(booking); // Set the booking for editing
+  };
+
   const handleSave = (bookingId, updatedStartDate, updatedEndDate) => {
-    // Find the booking by ID to get associated user and vehicle
-    const bookingToModify = bookings.find(booking => booking._id === bookingId);
-    const userId = bookingToModify?.userId; // Assuming `userId` is part of the booking
-    const vehicleId = bookingToModify?.vehicleId; // Assuming `vehicleId` is part of the booking
-  
     // Call the modifyBooking API with the new start and end dates
     axios.put(`https://vehicle-rental-6o3p.onrender.com/api/bookings/modify/${bookingId}`, {
       startDate: updatedStartDate,
@@ -84,39 +59,13 @@ const BookingsAdmin = () => {
           )
         );
         setEditableBooking(null); // Clear editable mode
-  
-        // Fetch user and vehicle details after modifying
-        if (userId && vehicleId) {
-          axios.all([
-            axios.get(`https://vehicle-rental-6o3p.onrender.com/api/users/${userId}`),
-            axios.get(`https://vehicle-rental-6o3p.onrender.com/api/vehicles/${vehicleId}`)
-          ])
-          .then(axios.spread((userResponse, vehicleResponse) => {
-            const user = userResponse.data; // User details (email, etc.)
-            const vehicle = vehicleResponse.data; // Vehicle details (make, model, etc.)
-  
-            // Now you can use this data as needed (e.g., send email, log info)
-            console.log(`Booking modified for ${user.email} on ${vehicle.make} ${vehicle.model}`);
-          }))
-          .catch((error) => {
-            console.error('Error fetching user or vehicle details:', error);
-          });
-        }
-  
         // Redirect back to dashboard after modifying
-        navigate('/admin-dashboard');
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
         setError('Error modifying booking: ' + error.message);
       });
   };
-  
-
-  const handleEdit = (booking) => {
-    setEditableBooking(booking); // Set the booking for editing
-  };
-
-
 
   if (loading) {
     return <div className="text-center py-4">Loading...</div>;
