@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom'; // To handle redirection
+import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 
 const BookingsAdmin = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editableBooking, setEditableBooking] = useState(null); // Store the editable booking
-  const history = useHistory(); // For redirecting after editing or canceling
+  const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
   useEffect(() => {
     // Fetch bookings from the API, and filter only confirmed bookings
@@ -34,7 +34,7 @@ const BookingsAdmin = () => {
           )
         );
         // Redirect back to dashboard after canceling
-        history.push('/admin-dashboard');
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
         setError('Error canceling booking: ' + error.message);
@@ -60,7 +60,7 @@ const BookingsAdmin = () => {
         );
         setEditableBooking(null); // Clear editable mode
         // Redirect back to dashboard after modifying
-        history.push('/admin-dashboard');
+        navigate('/admin-dashboard'); // Use navigate instead of history.push
       })
       .catch((error) => {
         setError('Error modifying booking: ' + error.message);
@@ -83,7 +83,7 @@ const BookingsAdmin = () => {
       <div className="mb-6 text-center">
         <button
           className="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600"
-          onClick={() => history.push('/admin-dashboard')}
+          onClick={() => navigate('/admin-dashboard')} // Use navigate instead of history.push
         >
           Back to Admin Dashboard
         </button>
