@@ -17,7 +17,7 @@ const BookingList = () => {
         const response = await axios.get(`https://vehicle-rental-6o3p.onrender.com/api/bookings/user/${userId}`);
         setBookings(response.data.bookings);
       } catch (err) {
-        setError('Error fetching bookings');
+        setError('No bookings Found');
       } finally {
         setLoading(false);
       }

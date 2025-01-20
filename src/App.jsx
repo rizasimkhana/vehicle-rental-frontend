@@ -36,6 +36,7 @@ function App() {
         <Route path="/bookings/:userId" element={<BookingList />} />
         <Route path="/bookings-admin" element={<BookingAdmin />} />
         <Route path="/user-accounts" element={<UsersList />} />
+        <Route path="/add-vehicle" element={<AddVehicle />} />
 
         </Routes>
     </Router>
