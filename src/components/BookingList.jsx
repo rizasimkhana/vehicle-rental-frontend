@@ -27,7 +27,7 @@ const BookingList = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`https://vehicle-rental-6o3p.onrender.com/api/bookings/user/${userId}`);
+        const response = await axios.get(`https://vehicle-rental-6o3p.onrender.com/api/bookings/user/`);
         setBookings(response.data.bookings);
       } catch (err) {
         setError('No bookings Found');

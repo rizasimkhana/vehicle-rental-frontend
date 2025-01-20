@@ -161,11 +161,6 @@ const VehicleDetails = () => {
           >
             Rent Car
           </button>
-          <button 
-            className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600"
-          >
-            Write a Review
-          </button>
         </div>
       </div>
     </div>
