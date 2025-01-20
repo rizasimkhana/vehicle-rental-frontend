@@ -9,8 +9,14 @@ const PaymentHistory = () => {
   const [showModal, setShowModal] = useState(false);  // Control modal visibility
   const [selectedPaymentId, setSelectedPaymentId] = useState(null); // To keep track of which payment's PDF to show
   const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false); 
   
   const user = JSON.parse(localStorage.getItem('user')); // Fetch user data from localStorage
+      // Toggle the mobile menu 
+      const toggleMenu = () => { 
+        setIsMenuOpen(!isMenuOpen); 
+      }; 
+  
 
   // Fetch payment history from backend API
   useEffect(() => {
@@ -78,6 +84,59 @@ const PaymentHistory = () => {
   }
 
   return (
+    <>
+          {/* Responsive Navbar */}
+          <nav className="bg-blue-500 p-4 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center">
+          <Link to="/" className="text-transparent text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
+            Dash Cars
+          </Link>
+          {/* Desktop Navbar */}
+          <div className="hidden md:flex space-x-6">
+            <Link to="/user-dashboard" className="text-white">Home</Link>
+            <Link to="/rental-history" className="text-white">Rental History</Link>
+            <Link to="/payment-history" className="text-white">Payment History</Link>
+            <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
+            <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
+            
+          </div>
+          {/* Mobile Hamburger Menu */}
+          <div className="md:hidden">
+            <button onClick={toggleMenu} className="text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
+                <path d="M2 2h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zm0 4h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1z"/>
+              </svg>
+            </button>
+          </div>
+          {/* First Letter Circle and Username */}
+          {firstLetter && (
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gray-800 text-white flex items-center justify-center rounded-full">
+                {firstLetter}
+              </div>
+              <p className="text-white font-semibold">{user.name}</p>
+              {/* Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 ml-4"
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-blue-500 p-4 space-y-4">
+          <Link to="/" className="text-white block">Home</Link>
+          <Link to="/rental-history" className="text-white block">Rental History</Link>
+          <Link to="/payment-history" className="text-white block">Payment History</Link>
+          <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
+          <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
+        </div>
+      )}
     <div className="payment-history-container max-w-7xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Payment History</h2>
 
@@ -153,6 +212,7 @@ const PaymentHistory = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
