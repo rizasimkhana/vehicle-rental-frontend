@@ -53,7 +53,7 @@ const VehicleDetails = () => {
         <div className="flex flex-col md:flex-row items-center mb-6">
           <div className="w-full md:w-1/3 mb-4 md:mb-0">
             <img 
-              src={vehicle.imageUrl} 
+              src={vehicle.image} 
               alt={`${vehicle.make} ${vehicle.model}`} 
               className="w-full h-64 object-cover rounded-lg"
             />
@@ -83,8 +83,8 @@ const VehicleDetails = () => {
                       {/* Displaying User's Image */}
                       {review.user.image ? (
                         <img 
-                          src={`https://vehicle-rental-6o3p.onrender.com/${review.user.image.replace(/\\/g, '/')}`} 
-                          alt={review.user.name} 
+                          src={`https://vehicle-rental-6o3p.onrender.com/${vehicle.image.replace(/\\/g, '/')}`} 
+                          alt={vehicle.make} 
                           className="w-12 h-12 rounded-full object-cover mr-4" 
                         />
                       ) : (
