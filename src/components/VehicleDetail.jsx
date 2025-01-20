@@ -78,7 +78,7 @@ const VehicleDetails = () => {
               reviews.map((review) => (
                 <div key={review._id} className="border-b pb-4">
                   {/* Safely checking if review.user is defined */}
-                  {review.user.name ? (
+                  {review.user ? (
                     <div className="flex items-center mb-3">
                       {/* Displaying User's Image */}
                       {review.user.image ? (
