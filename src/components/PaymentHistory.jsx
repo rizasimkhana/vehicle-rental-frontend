@@ -11,7 +11,14 @@ const PaymentHistory = () => {
   const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false); 
   
-  const user = JSON.parse(localStorage.getItem('user')); // Fetch user data from localStorage
+    const user = JSON.parse(localStorage.getItem('user')) || {}; 
+    const firstLetter = user.name ? user.name.charAt(0).toUpperCase() : ''; 
+
+      // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login');  // Redirect to login page
+  };
       // Toggle the mobile menu 
       const toggleMenu = () => { 
         setIsMenuOpen(!isMenuOpen); 
