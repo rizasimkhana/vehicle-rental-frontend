@@ -47,18 +47,10 @@ const BookingList = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="text-center text-lg font-medium text-red-500">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <>
       {/* Navigation Bar */}
-      <nav className="bg-blue-500 p-4 shadow-lg">
+      <nav className="bg-blue-500 p-4 shadow-lg fixed w-full top-0 left-0 z-10">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="text-transparent text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
             Dash Cars
@@ -110,8 +102,12 @@ const BookingList = () => {
       )}
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto mt-6">
-        {bookings.length === 0 ? (
+      <div className="max-w-4xl mx-auto mt-24"> {/* Adjust the margin to account for the fixed navbar */}
+        {error ? (
+          <div className="text-center text-lg font-medium text-red-500 mt-20">
+            {error}
+          </div>
+        ) : bookings.length === 0 ? (
           <div className="text-center text-lg font-medium text-gray-500">
             No bookings found for this user.
           </div>
