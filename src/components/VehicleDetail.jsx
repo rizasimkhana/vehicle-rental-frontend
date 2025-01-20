@@ -77,7 +77,24 @@ const VehicleDetails = () => {
             {reviews.length > 0 ? (
               reviews.map((review) => (
                 <div key={review._id} className="border-b pb-4">
-                  <p className="font-semibold">{review.userName} - {review.rating} stars</p>
+                  <div className="flex items-center mb-3">
+                    {review.user.image ? (
+                      <img 
+                        src={`https://vehicle-rental-6o3p.onrender.com/${review.user.image.replace(/\\/g, '/')}`} 
+                        alt={review.user.name} 
+                        className="w-12 h-12 rounded-full object-cover mr-4" 
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gray-400 mr-4" />
+                    )}
+                    <p className="font-semibold text-lg text-gray-900">{review.user.name}</p>
+                  </div>
+
+                  <div className="flex items-center mb-3">
+                    <span className="text-yellow-400">{"★".repeat(review.rating)}</span>
+                    <span className="text-gray-500 ml-2">({review.rating} / 5)</span>
+                  </div>
+
                   <p className="text-gray-700">{review.comment}</p>
                 </div>
               ))
