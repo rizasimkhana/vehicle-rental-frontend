@@ -15,6 +15,8 @@ import BookingList from './components/BookingList';
 import HomePage from './components/HomePage';
 import BookingAdmin from './components/BookingAdmin';
 import UsersList from './components/UsersList';
+import AddVehicle from './components/AddVehicle';
+
 
 
 function App() {
