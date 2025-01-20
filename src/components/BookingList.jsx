@@ -149,6 +149,16 @@ const BookingList = () => {
                     <strong>Status:</strong> {booking.status}
                   </p>
                 </div>
+                       {/* Write a Review Button */}
+                       <div className="text-center">
+                  {booking.userId && booking.status === 'confirmed' && (
+                    <button
+                      className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700"
+                    >
+                      Write a Review
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
