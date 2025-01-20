@@ -132,11 +132,10 @@ const VehicleDetails = () => {
               reviews.map((review) => (
                 <div key={review._id} className="border-b pb-4">
                   {/* Safely checking if review.user is defined */}
-                  <div className="flex items-center mb-3">
-                    <span className="font-semibold text-lg text-gray-900">
-                      {review.user && review.user.name ? review.user.name : 'Unknown User'}
-                    </span>
-                  </div>
+                  <div className="flex items-center justify-between mb-3">
+                  <span className="font-semibold text-lg text-gray-900">{review.user.name}</span>
+                  <span className="text-sm text-gray-500">{new Date(review.createdAt).toLocaleDateString()}</span>
+                </div>
 
                   {/* Rating Section */}
                   <div className="flex items-center mb-3">
