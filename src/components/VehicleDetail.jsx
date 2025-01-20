@@ -52,11 +52,7 @@ const VehicleDetails = () => {
       <div className="bg-white shadow-lg rounded-lg p-6">
         <div className="flex flex-col md:flex-row items-center mb-6">
           <div className="w-full md:w-1/3 mb-4 md:mb-0">
-            <img 
-              src={vehicle.image} 
-              alt={`${vehicle.make} ${vehicle.model}`} 
-              className="w-full h-64 object-cover rounded-lg"
-            />
+          <img src={`https://vehicle-rental-6o3p.onrender.com/${vehicle.image.replace(/\\/g, '/')}`} alt={`${vehicle.make} ${vehicle.model}`} className="w-full h-64 object-cover rounded-lg" />
           </div>
           <div className="w-full md:w-2/3 md:pl-6">
             <h2 className="text-3xl font-semibold">{vehicle.make} {vehicle.model}</h2>
@@ -106,7 +102,7 @@ const VehicleDetails = () => {
                   </div>
 
                   {/* Review Text */}
-                  <p className="text-gray-700">{review.comment}</p>
+                  <p className="text-gray-700">{review.reviewText}</p>
                 </div>
               ))
             ) : (
