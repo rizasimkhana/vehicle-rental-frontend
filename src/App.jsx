@@ -16,7 +16,7 @@ import HomePage from './components/HomePage';
 import BookingAdmin from './components/BookingAdmin';
 import UsersList from './components/UsersList';
 import AddVehicle from './components/AddVehicle';
-
+import WriteReview from './components/WriteReview';
 
 
 function App() {
@@ -39,8 +39,8 @@ function App() {
         <Route path="/bookings-admin" element={<BookingAdmin />} />
         <Route path="/user-accounts" element={<UsersList />} />
         <Route path="/add-vehicle" element={<AddVehicle />} />
-
-        </Routes>
+        <Route path="/write-review" element={<WriteReview />} />
+</Routes>
     </Router>
     </BookingProvider>
   );
