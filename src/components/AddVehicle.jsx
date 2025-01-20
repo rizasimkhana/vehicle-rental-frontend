@@ -83,7 +83,6 @@ const AddVehicle = () => {
           {/* Desktop Navbar */}
           <div className="hidden md:flex space-x-6">
             <Link to="/user-dashboard" className="text-white">Home</Link>
-            <Link to="/rental-history" className="text-white">Rental History</Link>
             <Link to="/payment-history" className="text-white">Payment History</Link>
             <Link to={`/bookings`} className="text-white">Bookings</Link>
             <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
@@ -120,7 +119,6 @@ const AddVehicle = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-blue-500 p-4 space-y-4">
           <Link to="/" className="text-white block">Home</Link>
-          <Link to="/rental-history" className="text-white block">Rental History</Link>
           <Link to="/payment-history" className="text-white block">Payment History</Link>
           <Link to={`/bookings`} className="text-white">Bookings</Link>
           <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>

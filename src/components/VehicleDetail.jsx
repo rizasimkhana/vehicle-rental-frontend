@@ -100,7 +100,6 @@ const VehicleDetails = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-blue-500 p-4 space-y-4">
           <Link to="/" className="text-white block">Home</Link>
-          <Link to="/rental-history" className="text-white block">Rental History</Link>
           <Link to="/payment-history" className="text-white block">Payment History</Link>
           <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
           <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
