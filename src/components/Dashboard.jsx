@@ -23,6 +23,12 @@ const Dashboard = () => {
     navigate(`/booking/${vehicle._id}`, { state: { vehicle } }); 
   }; 
 
+
+  //getting vehicle id
+  const handleVehicleClick = (vehicle) => {
+    navigate(`/vehicle/${vehicle._id}`, { state: { vehicle } }); // Navigate to VehicleDetails page
+  };
+
   const fetchVehicles = async () => { 
     setLoading(true); 
     setError(''); 
@@ -248,7 +254,7 @@ const Dashboard = () => {
           {vehicles.length > 0 ? (
             vehicles.map((vehicle) => (
               <div key={vehicle._id} className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                <Link to={`/vehicle/${vehicle._id}`} className="block">
+                 <div onClick={() => handleVehicleClick(vehicle)} className="cursor-pointer">
                   <img
                     src={`https://vehicle-rental-6o3p.onrender.com/${vehicle.image}`}
                     alt={vehicle.model}
@@ -264,7 +270,7 @@ const Dashboard = () => {
                     <h3 className="text-xl font-semibold text-gray-900">Description</h3>
                     <p className="text-gray-700 mt-2 text-lg italic">{vehicle.description}</p>
                   </div>
-                </Link>
+             </div>
                 <div className="mt-4 text-center">
                   <button
                     className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-all duration-300"
