@@ -17,7 +17,7 @@ const BookingList = () => {
     localStorage.removeItem('user');
     navigate('/login');  // Redirect to login page
   };
-  
+
   // Toggle the mobile menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -139,7 +139,7 @@ const BookingList = () => {
                 {/* User Information */}
                 <div className="text-center">
                   <p className="text-lg text-gray-700">
-                    <strong>Booked By:</strong> {booking.userId.name}
+                    <strong>Booked By:</strong> {booking.userId ? booking.userId.name : 'Unknown User'}
                   </p>
                 </div>
 
