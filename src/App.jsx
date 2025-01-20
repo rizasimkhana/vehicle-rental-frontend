@@ -35,7 +35,7 @@ function App() {
         <Route path="/payment-history" element={<PaymentHistory />} /> {/* User payment history */}
         <Route path="/vehicle/:vehicleId" element={<VehicleDetails />} />
         <Route path="/rental-history" element={<RentalHistory />} />
-        <Route path="/bookings/:userId" element={<BookingList />} />
+        <Route path="/bookings" element={<BookingList />} />
         <Route path="/bookings-admin" element={<BookingAdmin />} />
         <Route path="/user-accounts" element={<UsersList />} />
         <Route path="/add-vehicle" element={<AddVehicle />} />

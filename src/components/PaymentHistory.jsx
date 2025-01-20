@@ -99,7 +99,7 @@ const PaymentHistory = () => {
             <Link to="/user-dashboard" className="text-white">Home</Link>
             <Link to="/rental-history" className="text-white">Rental History</Link>
             <Link to="/payment-history" className="text-white">Payment History</Link>
-            <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
+            <Link to={`/bookings`} className="text-white">Bookings</Link>
             <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
             
           </div>
@@ -136,7 +136,7 @@ const PaymentHistory = () => {
           <Link to="/" className="text-white block">Home</Link>
           <Link to="/rental-history" className="text-white block">Rental History</Link>
           <Link to="/payment-history" className="text-white block">Payment History</Link>
-          <Link to={`/bookings/${user._id || user.userId}`} className="text-white">Bookings</Link>
+          <Link to={`/bookings`} className="text-white">Bookings</Link>
           <Link to={`/add-vehicle`} className="text-white">RENT CARS</Link>
         </div>
       )}
