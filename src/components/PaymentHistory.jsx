@@ -80,10 +80,6 @@ const PaymentHistory = () => {
     setSelectedPaymentId(null);
   };
 
-  // Function to handle back navigation
-  const handleBack = () => {
-    navigate('/user-dashboard');  // Navigate back to the user dashboard
-  };
 
   // Render loading message or the payment history table
   if (loading) {
@@ -146,14 +142,6 @@ const PaymentHistory = () => {
       )}
     <div className="payment-history-container max-w-7xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Payment History</h2>
-
-      {/* Back button */}
-      <button 
-        onClick={handleBack} 
-        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mb-4"
-      >
-        Back to Dashboard
-      </button>
 
       <table className="min-w-full table-auto border-collapse">
         <thead>
